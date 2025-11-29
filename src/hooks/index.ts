@@ -1,10 +1,10 @@
 // Firestore hooks
-export { useAddDocument } from './useAddDocument';
-export { useCollection } from './useCollection';
-export { useDeleteDocument } from './useDeleteDocument';
-export { useDocument } from './useDocument';
-export { usePaginatedCollection } from './usePaginatedCollection';
-export { useUpdateDocument } from './useUpdateDocument';
+export { useAddDocument } from './use-add-document';
+export { useCollection } from './use-collection';
+export { useDeleteDocument } from './use-delete-document';
+export { useDocument } from './use-document';
+export { usePaginatedCollection } from './use-paginated-collection';
+export { useUpdateDocument } from './use-update-document';
 
 // Storage hooks
-export { useFileUpload } from './useFileUpload';
+export { useFileUpload } from './use-file-upload';

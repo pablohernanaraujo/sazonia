@@ -88,7 +88,12 @@ const eslintConfig = defineConfig([
       'unicorn/prefer-string-trim-start-end': 'error',
       'unicorn/prefer-ternary': 'warn',
       'unicorn/throw-new-error': 'error',
-      // Note: unicorn/filename-case disabled - React convention uses PascalCase for components
+      'unicorn/filename-case': [
+        'error',
+        {
+          case: 'kebabCase',
+        },
+      ],
     },
   },
 
