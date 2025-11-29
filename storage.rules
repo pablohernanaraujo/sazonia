@@ -1,0 +1,111 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // =========================================================================
+    // Helper Functions
+    // =========================================================================
+
+    // Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if the authenticated user is the owner
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Validate file is an image type
+    function isImageType() {
+      return request.resource.contentType.matches('image/(png|jpeg|jpg|gif|webp)');
+    }
+
+    // Validate file is a document type
+    function isDocumentType() {
+      return request.resource.contentType.matches('application/pdf') ||
+        request.resource.contentType.matches('application/msword') ||
+        request.resource.contentType.matches('application/vnd.openxmlformats-officedocument.*');
+    }
+
+    // Validate file size in MB
+    function isValidSize(maxMB) {
+      return request.resource.size < maxMB * 1024 * 1024;
+    }
+
+    // =========================================================================
+    // User Uploads
+    // =========================================================================
+
+    // User's private files - full access to own folder
+    match /users/{userId}/{allPaths=**} {
+      allow read: if isOwner(userId);
+      allow write: if isOwner(userId) && isValidSize(10);
+    }
+
+    // =========================================================================
+    // Public Uploads
+    // =========================================================================
+
+    // Public uploads directory - images only, max 5MB
+    match /public/{fileName} {
+      allow read: if true;
+      allow write: if isAuthenticated() &&
+        isImageType() &&
+        isValidSize(5);
+    }
+
+    // =========================================================================
+    // Profile Avatars
+    // =========================================================================
+
+    // Profile pictures - public read, owner write
+    match /avatars/{userId}/{fileName} {
+      allow read: if true;
+      allow write: if isOwner(userId) &&
+        isImageType() &&
+        isValidSize(2);
+    }
+
+    // =========================================================================
+    // Document Attachments
+    // =========================================================================
+
+    // Document attachments - owner only
+    match /documents/{userId}/{docId}/{fileName} {
+      allow read: if isOwner(userId);
+      allow write: if isOwner(userId) &&
+        (isImageType() || isDocumentType()) &&
+        isValidSize(10);
+    }
+
+    // =========================================================================
+    // General Uploads
+    // =========================================================================
+
+    // General uploads folder
+    match /uploads/{userId}/{fileName} {
+      allow read: if isOwner(userId);
+      allow write: if isOwner(userId) &&
+        isValidSize(10);
+    }
+
+    // =========================================================================
+    // Temporary Uploads
+    // =========================================================================
+
+    // Temporary uploads (should be cleaned up periodically)
+    match /temp/{userId}/{fileName} {
+      allow read, write: if isOwner(userId) && isValidSize(50);
+    }
+
+    // =========================================================================
+    // Default: Deny All
+    // =========================================================================
+
+    // Deny access to any other paths not explicitly defined
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
