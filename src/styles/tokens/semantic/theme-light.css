@@ -1,0 +1,65 @@
+/**
+ * Semantic Theme Tokens - Light Mode
+ * Maps core primitive tokens to semantic intent.
+ * Components reference these tokens for consistent theming.
+ */
+
+:root {
+  /* ============================================
+   * SURFACE - Background contexts
+   * ============================================ */
+  --surface-primary: var(--bg-surface-base-primary);
+  --surface-secondary: var(--bg-surface-base-secondary);
+  --surface-tertiary: var(--bg-surface-base-tertiary);
+
+  /* ============================================
+   * BRAND - Primary brand colors
+   * ============================================ */
+  --brand-fill: var(--bg-fill-brand-primary);
+  --brand-fill-hover: var(--bg-fill-brand-primary-hover);
+  --brand-fill-active: var(--bg-fill-brand-primary-active);
+  --brand-text: var(--text-semantic-brand);
+
+  /* ============================================
+   * SECONDARY - Neutral fill colors
+   * ============================================ */
+  --secondary-fill: var(--bg-fill-base-secondary);
+  --secondary-fill-hover: var(--bg-fill-base-secondary-hover);
+  --secondary-fill-active: var(--bg-fill-base-secondary-active);
+
+  /* ============================================
+   * TERTIARY - Subtle fill colors
+   * ============================================ */
+  --tertiary-fill: var(--bg-fill-base-tertiary);
+  --tertiary-fill-hover: var(--bg-fill-base-tertiary-hover);
+  --tertiary-fill-active: var(--bg-fill-base-tertiary-active);
+
+  /* ============================================
+   * DANGER - Destructive actions
+   * ============================================ */
+  --danger-fill: var(--text-semantic-danger);
+  --danger-fill-hover: var(--text-semantic-danger-hover);
+  --danger-fill-active: var(--text-semantic-danger-active);
+  --danger-text: var(--text-semantic-danger);
+
+  /* ============================================
+   * TEXT - Content text
+   * ============================================ */
+  --text-primary: var(--text-base-primary);
+  --text-secondary: var(--text-base-secondary);
+  --text-overlay-white: var(--text-overlay-w-primary);
+
+  /* ============================================
+   * BORDER - Component borders
+   * ============================================ */
+  --border-default: var(--border-base-primary);
+  --border-brand: var(--border-brand-primary);
+  --border-danger: var(--text-semantic-danger);
+
+  /* ============================================
+   * FOCUS - Focus ring colors
+   * ============================================ */
+  --focus-ring-brand: var(--bg-fill-brand-primary);
+  --focus-ring-secondary: var(--text-base-secondary);
+  --focus-ring-danger: var(--text-semantic-danger);
+}

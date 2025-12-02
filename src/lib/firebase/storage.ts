@@ -1,12 +1,12 @@
 import { ref, type StorageReference } from 'firebase/storage';
 
-import { storage } from './client';
+import { getClientStorage } from './client';
 
 /**
  * Get a storage reference for a given path
  */
 export function getStorageRef(path: string): StorageReference {
-  return ref(storage, path);
+  return ref(getClientStorage(), path);
 }
 
 /**
@@ -64,4 +64,4 @@ export function formatFileSize(bytes: number): string {
   return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-export { storage };
+export { getClientStorage as storage };

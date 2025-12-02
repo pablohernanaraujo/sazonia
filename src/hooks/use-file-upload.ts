@@ -9,8 +9,8 @@ import {
   type UploadTask,
 } from 'firebase/storage';
 
-import { useAuth } from '@/contexts/AuthContext';
-import { storage } from '@/lib/firebase/client';
+import { useAuth } from '@/contexts/auth-context';
+import { getClientStorage } from '@/lib/firebase/client';
 import type { UploadProgress, UploadStatus } from '@/lib/firebase/types';
 
 interface UseFileUploadResult {
@@ -52,7 +52,7 @@ export function useFileUpload(): UseFileUploadResult {
       }
 
       const path = customPath || `uploads/${user.uid}/${Date.now()}_${file.name}`;
-      const storageRef = ref(storage, path);
+      const storageRef = ref(getClientStorage(), path);
 
       return new Promise((resolve, reject) => {
         const uploadTask = uploadBytesResumable(storageRef, file);
@@ -97,7 +97,7 @@ export function useFileUpload(): UseFileUploadResult {
   );
 
   const deleteFile = useCallback(async (url: string) => {
-    const fileRef = ref(storage, url);
+    const fileRef = ref(getClientStorage(), url);
     await deleteObject(fileRef);
   }, []);
 

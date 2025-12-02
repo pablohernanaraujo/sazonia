@@ -30,8 +30,9 @@ Create a new plan in ai/plans/\*.md to implement the `Ui` using the exact specif
 Focus on the following files:
 
 - `README.md` - Contains the project overview and instructions.
+- `.claude/rules/code-quality.md` - ESLint and Prettier configuration with import sorting rules, code complexity limits (max-depth, max-params), TypeScript rules, React hooks rules, and file naming conventions (kebab-case).
 - `.claude/rules/component-patterns.md` - Component architecture patterns using Class Variance Authority (CVA), Radix UI wrappers, polymorphic components with Slot, semantic color system, and TypeScript patterns for building composable, type-safe UI components.
-- `.claude/rules/styling-guidelines.md` - Tailwind CSS 4 setup and configuration, design token system with semantic colors (primary/secondary/neutral/destructive), typography system using Rubik font, spacing/responsive design patterns, and custom utilities.
+- `.claude/rules/styling-guidelines.md` - Tailwind CSS 4 setup and configuration, design token system with semantic colors (primary/secondary/neutral/destructive), typography system using Inter font, spacing/responsive design patterns, and custom utilities.
 - `.claude/rules/testing-patterns.md` - Testing patterns with Vitest 3.x and React Testing Library 16.x, including unit testing utilities, hook testing with renderHook, component testing strategies, mocking patterns for Next.js/Clerk/Axios, and accessibility testing.
 - `src/ui/**` - Existing UI components to reference for patterns and composition.
 - `src/stories/**/*.stories.tsx` - Existing Storybook stories to reference for story patterns and structure.
@@ -137,12 +138,13 @@ Use these files to implement the feature:
 
 <list all new files that need to be created, including:>
 
-1. **Component file**: `src/ui/<category>/<component>.tsx` (REQUIRED)
-2. **Test file**: `src/ui/<category>/__tests__/<component>.test.tsx` (REQUIRED)
-3. **Story file**: `src/stories/<category>/<component>.stories.tsx` (REQUIRED & NON-NEGOTIABLE)
-4. **Category barrel** (if new category): `src/ui/<category>/index.ts`
+1. **Component token file**: `src/styles/tokens/components/<component>.css` (REQUIRED)
+2. **Component file**: `src/ui/<category>/<component>.tsx` (REQUIRED)
+3. **Test file**: `src/ui/<category>/__tests__/<component>.test.tsx` (REQUIRED)
+4. **Story file**: `src/stories/<category>/<component>.stories.tsx` (REQUIRED & NON-NEGOTIABLE)
+5. **Category barrel** (if new category): `src/ui/<category>/index.ts`
 
-⚠️ All three core files (component, tests, stories) are mandatory deliverables.
+⚠️ All four core files (tokens, component, tests, stories) are mandatory deliverables.
 
 ## Style & Design Requirements
 
@@ -260,13 +262,56 @@ export const AllVariants: Story = {
 
 ## Implementation Plan
 
-### Phase 1: Foundation
+### Phase 1: Foundation & Token Architecture
 
 <describe the foundational work needed before implementing the main component>
 
+**Token Creation (REQUIRED):**
+
+1. Create component token file: `src/styles/tokens/components/<component>.css`
+2. Define all themeable properties as CSS custom properties:
+   - Background colors and hover states
+   - Text colors for different states
+   - Border colors and radius
+   - Spacing (padding, gap, margins)
+   - Shadows and effects
+   - Size variants (height, width)
+3. Reference semantic tokens (Layer 2) NOT core tokens (Layer 1)
+4. Add import to `src/styles/index.css` in the Component Tokens section
+
+**Token Naming Convention:** `--{component}-{property}[-{variant}][-{state}]`
+
+**Example token file structure:**
+
+```css
+/* src/styles/tokens/components/<component>.css */
+:root {
+  /* Layout tokens */
+  --<component>-border-radius: var(--radius-md);
+  --<component>-padding: var(--spacing-4);
+  --<component>-gap: var(--spacing-2);
+
+  /* Primary variant */
+  --<component>-primary-bg: var(--brand-fill);
+  --<component>-primary-bg-hover: var(--brand-fill-hover);
+  --<component>-primary-text: var(--text-overlay-white);
+
+  /* Secondary variant */
+  --<component>-secondary-bg: var(--secondary-fill);
+  --<component>-secondary-bg-hover: var(--secondary-fill-hover);
+  --<component>-secondary-text: var(--text-primary);
+}
+```
+
 ### Phase 2: Core Implementation
 
-<describe the main implementation work for the component>
+<describe the main implementation work for the component, ensuring CVA variants use component tokens>
+
+**Token Usage in CVA (REQUIRED):**
+
+- Use `bg-[var(--component-token)]` syntax for all themeable properties
+- Regular Tailwind classes for non-themeable properties (layout, transitions)
+- See `.claude/rules/styling-guidelines.md` for token architecture details
 
 ### Phase 3: Design System Integration & Documentation
 
@@ -293,17 +338,22 @@ export const AllVariants: Story = {
 **Required Task Sections** (ALL are mandatory):
 
 1. **Foundation/Setup tasks** - Research and planning
-2. **Component implementation** - Core component development
-3. **Unit tests creation** - Comprehensive test coverage (>90%)
-4. **Storybook stories creation** (REQUIRED & NON-NEGOTIABLE)
+2. **Token creation** (REQUIRED & NON-NEGOTIABLE)
+   - Create `src/styles/tokens/components/<component>.css`
+   - Define tokens for all themeable properties (colors, spacing, radius, shadows)
+   - Reference semantic tokens (Layer 2), NOT core tokens (Layer 1)
+   - Add import to `src/styles/index.css`
+3. **Component implementation** - Core component development using component tokens
+4. **Unit tests creation** - Comprehensive test coverage (>90%)
+5. **Storybook stories creation** (REQUIRED & NON-NEGOTIABLE)
    - Create `src/stories/<category>/<component>.stories.tsx`
    - Configure comprehensive argTypes for all props
    - Implement stories for ALL variants and states
    - Create real-world usage examples (minimum 2-3)
    - Add interactive controls for all configurable props
    - Document responsive behavior (if applicable)
-5. **Barrel exports and integration** - Export configuration
-6. **Validation commands execution** - Run ALL validation commands
+6. **Barrel exports and integration** - Export configuration
+7. **Validation commands execution** - Run ALL validation commands
 
 ## Testing Strategy
 
@@ -321,13 +371,23 @@ export const AllVariants: Story = {
 
 **Required Criteria for ALL Components**:
 
+### Token Architecture Requirements (NON-NEGOTIABLE)
+
+- ✅ **Component token file created: `src/styles/tokens/components/<component>.css`**
+- ✅ **Token file imported in `src/styles/index.css`**
+- ✅ **All themeable properties defined as tokens** (colors, spacing, radius, shadows)
+- ✅ **Tokens reference semantic layer (Layer 2)**, NOT core layer (Layer 1)
+- ✅ **Token naming follows convention:** `--{component}-{property}[-{variant}][-{state}]`
+- ✅ **CVA uses component tokens** via `bg-[var(--component-token)]` syntax
+- ✅ **No hardcoded color/spacing values** in component file
+
 ### Functional Requirements
 
 - ✅ Component implemented in `src/ui/<category>/` with proper TypeScript types
 - ✅ All component variants work correctly
 - ✅ Component forwards refs correctly (if applicable)
 - ✅ Component supports polymorphic rendering with asChild (if applicable)
-- ✅ Component follows design system patterns (CVA, polymorphic components, semantic tokens)
+- ✅ Component follows design system patterns (CVA, polymorphic components, component tokens)
 
 ### Testing Requirements
 

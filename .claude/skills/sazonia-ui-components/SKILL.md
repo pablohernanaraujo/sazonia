@@ -182,7 +182,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground',
+        default: 'text-primary-foreground bg-primary',
         outline: 'border-input border bg-background',
       },
       size: {
@@ -517,24 +517,143 @@ Usage:
 </Card>
 ```
 
+## Component Token Integration
+
+Every UI component should use the **3-layer token architecture** for themeable styling. See `.claude/rules/styling-guidelines.md` for full architecture details.
+
+### Step 1: Create Component Token File
+
+Create a token file for your component in `src/styles/tokens/components/`:
+
+```css
+/* src/styles/tokens/components/card.css */
+:root {
+  /* Card background */
+  --card-bg: var(--surface-primary);
+  --card-bg-hover: var(--surface-secondary);
+
+  /* Card border */
+  --card-border: var(--border-default);
+  --card-border-radius: var(--radius-md);
+
+  /* Card shadow */
+  --card-shadow: var(--shadow-sm);
+  --card-shadow-hover: var(--shadow-md);
+
+  /* Card spacing */
+  --card-padding: var(--spacing-4);
+}
+```
+
+**Naming convention:** `--{component}-{property}[-{variant}][-{state}]`
+
+### Step 2: Import Token File
+
+Add the import to `src/styles/index.css` in the **Component Tokens** section:
+
+```css
+/* LAYER 3: Component Tokens (references Layer 2) */
+@import './tokens/components/button.css';
+@import './tokens/components/card.css'; /* Add your component */
+```
+
+### Step 3: Use Tokens in CVA
+
+Reference component tokens using Tailwind's arbitrary value syntax:
+
+```typescript
+const cardVariants = cva(
+  [
+    // Use component tokens for themeable properties
+    'bg-[var(--card-bg)]',
+    'border border-[var(--card-border)]',
+    'rounded-[var(--card-border-radius)]',
+    'shadow-[var(--card-shadow)]',
+    'p-[var(--card-padding)]',
+    // Non-themeable properties use regular Tailwind
+    'transition-shadow duration-200',
+  ],
+  {
+    variants: {
+      variant: {
+        default: '',
+        elevated: 'shadow-[var(--card-shadow-hover)]',
+        interactive:
+          'hover:bg-[var(--card-bg-hover)] hover:shadow-[var(--card-shadow-hover)]',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
+  }
+);
+```
+
+### Token Architecture Rules
+
+| Use Tokens For            | Use Regular Tailwind For                     |
+| ------------------------- | -------------------------------------------- |
+| Colors (bg, text, border) | Layout (flex, grid, positioning)             |
+| Spacing (padding, gap)    | Typography (font-size via tokens or classes) |
+| Border radius             | Transitions and animations                   |
+| Shadows                   | Display and visibility                       |
+| Heights/widths for sizes  | Responsive breakpoints                       |
+
+### Anti-Patterns
+
+```typescript
+// ❌ BAD: Hardcoded color values
+className = 'bg-[#3c61dd] hover:bg-[#385bcc]';
+
+// ❌ BAD: Referencing core tokens directly (skip semantic layer)
+className = 'bg-[var(--bg-fill-brand-primary)]';
+
+// ❌ BAD: Referencing semantic tokens directly (skip component layer)
+className = 'bg-[var(--brand-fill)]';
+
+// ✅ GOOD: Using component tokens
+className = 'bg-[var(--card-bg)] hover:bg-[var(--card-bg-hover)]';
+```
+
 ## Component Checklist
 
 When creating or reviewing UI components:
+
+**Structure & Setup:**
 
 - [ ] Component is in correct category (`src/ui/[category]/`)
 - [ ] File name is kebab-case
 - [ ] Uses direct React imports (not namespace)
 - [ ] Uses `forwardRef` for ref forwarding
 - [ ] Sets `displayName` for debugging
+
+**TypeScript:**
+
 - [ ] Props extend `ComponentProps<"element">`
-- [ ] Variants defined with CVA
 - [ ] Props include `VariantProps<typeof variants>`
-- [ ] Uses `cn()` to merge className
-- [ ] Default variants specified
-- [ ] Added to category barrel export
-- [ ] Added to root barrel export
 - [ ] TypeScript types exported
 - [ ] No `any` types used
+
+**CVA & Variants:**
+
+- [ ] Variants defined with CVA
+- [ ] Uses `cn()` to merge className
+- [ ] Default variants specified
+
+**Token Architecture:**
+
+- [ ] Component token file created (`src/styles/tokens/components/<name>.css`)
+- [ ] Token file imported in `src/styles/index.css`
+- [ ] CVA uses component tokens for themeable properties
+- [ ] No hardcoded color/spacing values in component
+
+**Exports:**
+
+- [ ] Added to category barrel export
+- [ ] Added to root barrel export
+
+**Accessibility:**
+
 - [ ] Accessible (ARIA attributes when needed)
 
 ## Variant Design Guidelines
@@ -633,3 +752,4 @@ For more details:
 - See `.claude/rules/component-patterns.md` for complete component patterns
 - See `.claude/rules/styling-guidelines.md` for styling conventions
 - See `.claude/rules/accessibility-patterns.md` for accessibility requirements
+- See `.claude/rules/code-quality.md` for ESLint, Prettier, and code quality standards

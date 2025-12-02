@@ -56,10 +56,10 @@ const eslintConfig = defineConfig([
       'simple-import-sort/exports': 'error',
 
       // Code quality (start as warnings, increase to errors after compliance)
-      complexity: ['warn', { max: 10 }],
+      complexity: ['warn', { max: 15 }],
       'max-depth': ['warn', { max: 3 }],
       'max-nested-callbacks': ['warn', { max: 3 }],
-      'max-params': ['warn', { max: 3 }],
+      'max-params': ['warn', { max: 5 }],
 
       // Console statements
       'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

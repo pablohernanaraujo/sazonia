@@ -1,0 +1,132 @@
+/**
+ * Button Component Tokens
+ * References semantic tokens for consistent theming.
+ * Use these tokens in Button component styles.
+ */
+
+:root {
+  /* ============================================
+   * BUTTON - Layout tokens
+   * ============================================ */
+  --button-border-radius: var(--radius-sm);
+  --button-gap: 0.5rem;
+
+  /* ============================================
+   * BUTTON - Size tokens (height, padding)
+   * ============================================ */
+  --button-height-sm: 2rem;
+  --button-height-md: 2.5rem;
+  --button-height-lg: 3rem;
+
+  --button-padding-x-sm: 0.75rem;
+  --button-padding-y-sm: 0.5rem;
+  --button-padding-x-md: 0.875rem;
+  --button-padding-y-md: 0.625rem;
+  --button-padding-x-lg: 0.875rem;
+  --button-padding-y-lg: 0.75rem;
+
+  /* ============================================
+   * BUTTON FILLED PRIMARY - Brand button
+   * ============================================ */
+  --button-filled-primary-bg: var(--brand-fill);
+  --button-filled-primary-bg-hover: var(--brand-fill-hover);
+  --button-filled-primary-bg-active: var(--brand-fill-active);
+  --button-filled-primary-text: var(--text-overlay-white);
+
+  /* ============================================
+   * BUTTON FILLED SECONDARY - Neutral button
+   * ============================================ */
+  --button-filled-secondary-bg: var(--secondary-fill);
+  --button-filled-secondary-bg-hover: var(--secondary-fill-hover);
+  --button-filled-secondary-bg-active: var(--secondary-fill-active);
+  --button-filled-secondary-text: var(--text-primary);
+
+  /* ============================================
+   * BUTTON FILLED DANGER - Destructive button
+   * ============================================ */
+  --button-filled-danger-bg: var(--danger-fill);
+  --button-filled-danger-bg-hover: var(--danger-fill-hover);
+  --button-filled-danger-bg-active: var(--danger-fill-active);
+  --button-filled-danger-text: var(--text-overlay-white);
+
+  /* ============================================
+   * BUTTON OUTLINE PRIMARY - Brand outline
+   * ============================================ */
+  --button-outline-primary-border: var(--border-brand);
+  --button-outline-primary-text: var(--brand-text);
+  --button-outline-primary-bg-hover: rgba(60, 97, 221, 0.1);
+  --button-outline-primary-bg-active: rgba(60, 97, 221, 0.2);
+
+  /* ============================================
+   * BUTTON OUTLINE SECONDARY - Neutral outline
+   * ============================================ */
+  --button-outline-secondary-border: var(--border-default);
+  --button-outline-secondary-text: var(--text-primary);
+  --button-outline-secondary-bg-hover: var(--secondary-fill);
+  --button-outline-secondary-bg-active: var(--secondary-fill-hover);
+
+  /* ============================================
+   * BUTTON OUTLINE DANGER - Destructive outline
+   * ============================================ */
+  --button-outline-danger-border: var(--border-danger);
+  --button-outline-danger-text: var(--danger-text);
+  --button-outline-danger-bg-hover: rgba(229, 77, 46, 0.1);
+  --button-outline-danger-bg-active: rgba(229, 77, 46, 0.2);
+
+  /* ============================================
+   * BUTTON TINTED PRIMARY - Brand tinted
+   * ============================================ */
+  --button-tinted-primary-bg: rgba(60, 97, 221, 0.1);
+  --button-tinted-primary-bg-hover: rgba(60, 97, 221, 0.2);
+  --button-tinted-primary-bg-active: rgba(60, 97, 221, 0.3);
+  --button-tinted-primary-text: var(--brand-text);
+
+  /* ============================================
+   * BUTTON TINTED SECONDARY - Neutral tinted
+   * ============================================ */
+  --button-tinted-secondary-bg: var(--tertiary-fill);
+  --button-tinted-secondary-bg-hover: var(--tertiary-fill-hover);
+  --button-tinted-secondary-bg-active: var(--tertiary-fill-active);
+  --button-tinted-secondary-text: var(--text-primary);
+
+  /* ============================================
+   * BUTTON TINTED DANGER - Destructive tinted
+   * ============================================ */
+  --button-tinted-danger-bg: rgba(229, 77, 46, 0.1);
+  --button-tinted-danger-bg-hover: rgba(229, 77, 46, 0.2);
+  --button-tinted-danger-bg-active: rgba(229, 77, 46, 0.3);
+  --button-tinted-danger-text: var(--danger-text);
+
+  /* ============================================
+   * BUTTON PLAIN PRIMARY - Brand plain
+   * ============================================ */
+  --button-plain-primary-text: var(--brand-text);
+  --button-plain-primary-bg-hover: rgba(60, 97, 221, 0.1);
+  --button-plain-primary-bg-active: rgba(60, 97, 221, 0.2);
+
+  /* ============================================
+   * BUTTON PLAIN SECONDARY - Neutral plain
+   * ============================================ */
+  --button-plain-secondary-text: var(--text-primary);
+  --button-plain-secondary-bg-hover: var(--tertiary-fill);
+  --button-plain-secondary-bg-active: var(--tertiary-fill-hover);
+
+  /* ============================================
+   * BUTTON PLAIN DANGER - Destructive plain
+   * ============================================ */
+  --button-plain-danger-text: var(--danger-text);
+  --button-plain-danger-bg-hover: rgba(229, 77, 46, 0.1);
+  --button-plain-danger-bg-active: rgba(229, 77, 46, 0.2);
+
+  /* ============================================
+   * BUTTON - Focus ring tokens
+   * ============================================ */
+  --button-focus-ring-primary: var(--focus-ring-brand);
+  --button-focus-ring-secondary: var(--focus-ring-secondary);
+  --button-focus-ring-danger: var(--focus-ring-danger);
+
+  /* ============================================
+   * BUTTON - Disabled state
+   * ============================================ */
+  --button-disabled-opacity: 0.52;
+}

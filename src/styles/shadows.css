@@ -1,0 +1,53 @@
+/**
+ * Glow UI Design System - Shadow Effect Tokens
+ * Source: Figma Glow UI Pro 1.8
+ *
+ * This file contains all shadow effect variables for consistent elevation styling.
+ * The shadow scale provides different levels of depth and emphasis for UI elements.
+ *
+ * Naming convention:
+ * - Semantic sizes: xs, sm, md, lg, xl, 2xl
+ * - Special variants: inner (inset shadow), soft (diffused shadow)
+ * - Utility: none (removes shadow)
+ *
+ * Usage:
+ * - Subtle elevation: box-shadow: var(--shadow-xs);
+ * - Standard cards: box-shadow: var(--shadow-md);
+ * - Modals/dialogs: box-shadow: var(--shadow-lg);
+ * - Soft/diffused: box-shadow: var(--shadow-soft);
+ * - Pressed/embedded: box-shadow: var(--shadow-inner);
+ */
+
+:root {
+  /* ============================================
+   * SHADOW SCALE
+   * All shadows use RGBA for consistent transparency
+   * ============================================ */
+
+  /* Extra Small - Subtle shadow for minimal elevation */
+  --shadow-xs: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+
+  /* Small - Light shadow for slight elevation */
+  --shadow-sm: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+
+  /* Medium - Standard shadow for cards and containers */
+  --shadow-md: 0px 4px 6px -1px rgba(0, 0, 0, 0.08);
+
+  /* Large - Pronounced shadow for modals and dropdowns */
+  --shadow-lg: 0px 10px 15px -3px rgba(0, 0, 0, 0.08);
+
+  /* Extra Large - Heavy shadow for prominent elements */
+  --shadow-xl: 0px 20px 25px -5px rgba(0, 0, 0, 0.08);
+
+  /* 2x Large - Maximum shadow for high-emphasis elements */
+  --shadow-2xl: 0px 25px 50px -12px rgba(0, 0, 0, 0.18);
+
+  /* Inner - Inset shadow for pressed/embedded effects */
+  --shadow-inner: inset 0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+
+  /* Soft - Diffused shadow for delicate UI elements */
+  --shadow-soft: 0px 10px 15px -3px rgba(0, 0, 0, 0.04);
+
+  /* None - Utility to remove shadow */
+  --shadow-none: none;
+}

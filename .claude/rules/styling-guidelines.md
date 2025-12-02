@@ -29,14 +29,7 @@ Tailwind CSS 4 uses CSS-based configuration instead of JavaScript config files.
 
 ### Plugin Integration
 
-```css
-/* prettier configuration for Tailwind */
-{
-  "plugins": ["prettier-plugin-tailwindcss"],
-  "tailwindStylesheet": "./src/app/globals.css",
-  "tailwindFunctions": ["cva", "cn"]
-}
-```
+Tailwind CSS classes are automatically sorted by Prettier. See [Code Quality Guidelines](./code-quality.md) for the full Prettier and ESLint configuration.
 
 **Key principles:**
 
@@ -339,6 +332,196 @@ Access theme values in custom CSS:
 
 ## Design Token System
 
+### Token Architecture (3 Layers)
+
+Sazonia uses a **3-layer token architecture** for scalable theming and component consistency:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  LAYER 3: Component Tokens                                  │
+│  src/styles/tokens/components/*.css                         │
+│  --button-bg, --button-fg, --input-border                   │
+│  References → Semantic Tokens                               │
+├─────────────────────────────────────────────────────────────┤
+│  LAYER 2: Semantic Tokens                                   │
+│  src/styles/tokens/semantic/*.css                           │
+│  --brand-fill, --surface-primary, --text-default            │
+│  References → Core Tokens                                   │
+├─────────────────────────────────────────────────────────────┤
+│  LAYER 1: Core/Primitive Tokens                             │
+│  src/styles/*.css (colors, spacing, radius, shadows, blur)  │
+│  --bg-fill-brand-primary, --text-base-primary, --radius-md  │
+│  Raw values from Glow UI design system                      │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Directory Structure
+
+```
+src/styles/
+├── index.css                    # Aggregator (imports all layers in order)
+├── colors.css                   # Layer 1: Core color primitives
+├── spacing.css                  # Layer 1: Core spacing scale
+├── border-radius.css            # Layer 1: Core radius scale
+├── shadows.css                  # Layer 1: Core shadow effects
+├── blur.css                     # Layer 1: Core blur effects
+└── tokens/
+    ├── semantic/
+    │   └── theme-light.css      # Layer 2: Semantic mappings (light theme)
+    └── components/
+        └── button.css           # Layer 3: Button component tokens
+```
+
+#### Import Order (Critical)
+
+The import order in `src/styles/index.css` is **critical** for proper variable resolution:
+
+```css
+/* src/styles/index.css */
+
+/* LAYER 1: Core/Primitive Tokens (must be first) */
+@import './colors.css';
+@import './spacing.css';
+@import './border-radius.css';
+@import './shadows.css';
+@import './blur.css';
+
+/* LAYER 2: Semantic Tokens (references Layer 1) */
+@import './tokens/semantic/theme-light.css';
+
+/* LAYER 3: Component Tokens (references Layer 2) */
+@import './tokens/components/button.css';
+```
+
+#### Layer 1: Core/Primitive Tokens
+
+Raw design values from Glow UI. These are the "source of truth" values.
+
+```css
+/* src/styles/colors.css */
+:root {
+  --bg-fill-brand-primary: #3c61dd;
+  --bg-fill-brand-primary-hover: #385bcc;
+  --text-base-primary: #11181c;
+  --text-overlay-w-primary: #ffffff;
+}
+```
+
+**Rule:** Never reference core tokens directly in components. Always go through semantic layer.
+
+#### Layer 2: Semantic Tokens
+
+Maps core tokens to **intent**. This enables global theming.
+
+```css
+/* src/styles/tokens/semantic/theme-light.css */
+:root {
+  /* Brand intent */
+  --brand-fill: var(--bg-fill-brand-primary);
+  --brand-fill-hover: var(--bg-fill-brand-primary-hover);
+
+  /* Text intent */
+  --text-primary: var(--text-base-primary);
+  --text-overlay-white: var(--text-overlay-w-primary);
+
+  /* Surface intent */
+  --surface-primary: var(--bg-surface-base-primary);
+}
+```
+
+**To add dark mode:** Create `theme-dark.css` with `[data-theme="dark"]` selector overriding the same variables.
+
+#### Layer 3: Component Tokens
+
+Component-specific tokens that reference semantic tokens. Each component has its own namespace.
+
+```css
+/* src/styles/tokens/components/button.css */
+:root {
+  /* Button filled primary */
+  --button-filled-primary-bg: var(--brand-fill);
+  --button-filled-primary-bg-hover: var(--brand-fill-hover);
+  --button-filled-primary-text: var(--text-overlay-white);
+
+  /* Button layout */
+  --button-border-radius: var(--radius-sm);
+  --button-height-md: 2.5rem;
+}
+```
+
+#### Using Component Tokens in CVA
+
+Components use CSS variables via Tailwind's arbitrary value syntax:
+
+```typescript
+// src/ui/buttons/button.tsx
+const buttonVariants = cva(
+  [
+    'inline-flex items-center justify-center',
+    'rounded-[var(--button-border-radius)]', // Token for radius
+    'h-[var(--button-height-md)]', // Token for height
+  ],
+  {
+    variants: {
+      variant: {
+        filled: '',
+        outline: 'border bg-transparent',
+      },
+      color: {
+        primary: '',
+        secondary: '',
+      },
+    },
+    compoundVariants: [
+      {
+        variant: 'filled',
+        color: 'primary',
+        className: [
+          'bg-[var(--button-filled-primary-bg)]',
+          'text-[var(--button-filled-primary-text)]',
+          'hover:bg-[var(--button-filled-primary-bg-hover)]',
+        ].join(' '),
+      },
+    ],
+  }
+);
+```
+
+#### Benefits of Token Architecture
+
+| Benefit                    | Description                                              |
+| -------------------------- | -------------------------------------------------------- |
+| **Global Theming**         | Change semantic tokens → all components update           |
+| **Dark Mode Ready**        | Add `theme-dark.css` without touching components         |
+| **Component Isolation**    | Each component has its own token namespace               |
+| **Maintainability**        | Single source of truth for each value                    |
+| **Tailwind v4 Compatible** | Works with `@theme` for utilities + CSS vars for runtime |
+
+#### Anti-Patterns to Avoid
+
+```typescript
+// ❌ BAD: Hardcoded values in component
+className = 'bg-[#3c61dd] hover:bg-[#385bcc]';
+
+// ❌ BAD: Referencing core tokens directly
+className = 'bg-[var(--bg-fill-brand-primary)]';
+
+// ❌ BAD: Referencing semantic tokens in component (skip component layer)
+className = 'bg-[var(--brand-fill)]';
+
+// ✅ GOOD: Using component tokens
+className = 'bg-[var(--button-filled-primary-bg)]';
+```
+
+#### When to Create New Tokens
+
+| Scenario                           | Action                                                       |
+| ---------------------------------- | ------------------------------------------------------------ |
+| New color/spacing value            | Add to core layer (`src/styles/*.css`)                       |
+| New intent (e.g., "accent")        | Add to semantic layer (`tokens/semantic/`)                   |
+| New component                      | Create component token file (`tokens/components/<name>.css`) |
+| New variant for existing component | Add to existing component token file                         |
+
 ### Color Palette
 
 Sazonia uses a semantic color system with a 50-900 scale:
@@ -575,7 +758,7 @@ Special tokens for common UI elements:
 ```tsx
 <div className="bg-background text-foreground">
   <p className="text-muted-foreground">Secondary text</p>
-  <div className="border-border border">Bordered box</div>
+  <div className="border border-border">Bordered box</div>
 </div>
 ```
 
@@ -606,9 +789,9 @@ For now, focus on semantic color tokens that work in light mode.
 
 ```typescript
 // src/app/layout.tsx
-import { Rubik } from "next/font/google";
+import { Inter } from "next/font/google";
 
-const rubik = Rubik({
+const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
   display: "swap",
@@ -617,7 +800,7 @@ const rubik = Rubik({
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body className={rubik.className}>
+      <body className={inter.className}>
         {children}
       </body>
     </html>
@@ -735,11 +918,11 @@ Organize CSS layers for optimal cascade and specificity:
 @layer base {
   /* Global resets and defaults */
   * {
-    @apply border-border outline-ring/50;
+    @apply outline-ring/50 border-border;
   }
 
   html {
-    @apply border-primary bg-primary border-b-6;
+    @apply border-b-6 border-primary bg-primary;
   }
 
   body {
@@ -868,9 +1051,9 @@ const intentClasses = {
 
 ```typescript
 // app/layout.tsx
-import { Rubik } from 'next/font/google';
+import { Inter } from 'next/font/google';
 
-const rubik = Rubik({
+const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
   display: 'swap', // FOIT prevention
@@ -881,7 +1064,7 @@ const rubik = Rubik({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className={rubik.className}>
+    <html lang="es" className={inter.className}>
       <body>{children}</body>
     </html>
   );
@@ -893,7 +1076,7 @@ export default function RootLayout({ children }) {
 Load only required character sets:
 
 ```typescript
-const rubik = Rubik({
+const inter = Inter({
   subsets: ['latin'], // Only Latin characters (reduce bundle by ~70%)
   // Add more subsets only if needed:
   // subsets: ['latin', 'latin-ext'] for accented characters
@@ -1207,12 +1390,12 @@ Global styles and element defaults:
 @layer base {
   /* Global resets */
   * {
-    @apply border-border outline-ring/50;
+    @apply outline-ring/50 border-border;
   }
 
   /* Element defaults */
   html {
-    @apply border-primary bg-primary border-b-6;
+    @apply border-b-6 border-primary bg-primary;
   }
 
   body {
@@ -1663,26 +1846,308 @@ Custom utility for consistent horizontal padding:
 
 ## Border Radius
 
-Use Tailwind's default border radius scale:
+Sazonia uses custom border radius tokens from the Glow UI design system. These tokens are defined in `src/styles/border-radius.css` and exposed to Tailwind utilities via `@theme inline` in `globals.css`.
+
+### Border Radius Scale
+
+| Token          | CSS Variable    | Value    | Pixel    |
+| -------------- | --------------- | -------- | -------- |
+| `rounded-none` | `--radius-none` | 0        | 0px      |
+| `rounded-xxs`  | `--radius-xxs`  | 0.125rem | 2px      |
+| `rounded-xs`   | `--radius-xs`   | 0.25rem  | 4px      |
+| `rounded-sm`   | `--radius-sm`   | 0.375rem | 6px      |
+| `rounded-md`   | `--radius-md`   | 0.5rem   | 8px      |
+| `rounded-lg`   | `--radius-lg`   | 0.625rem | 10px     |
+| `rounded-xl`   | `--radius-xl`   | 0.75rem  | 12px     |
+| `rounded-2xl`  | `--radius-2xl`  | 0.875rem | 14px     |
+| `rounded-3xl`  | `--radius-3xl`  | 1rem     | 16px     |
+| `rounded-4xl`  | `--radius-4xl`  | 1.125rem | 18px     |
+| `rounded-full` | `--radius-full` | 999px    | Circular |
+
+### Usage Examples
 
 ```tsx
-<div className="rounded">     {/* 0.25rem = 4px */}
-<div className="rounded-md">  {/* 0.375rem = 6px */}
-<div className="rounded-lg">  {/* 0.5rem = 8px */}
-<div className="rounded-xl">  {/* 0.75rem = 12px */}
-<div className="rounded-full"> {/* 9999px - Circle */}
+// Small rounding for inputs and subtle elements
+<input className="rounded-sm" />     {/* 6px */}
+
+// Medium rounding for cards and containers
+<div className="rounded-md" />       {/* 8px */}
+
+// Large rounding for buttons and prominent elements
+<button className="rounded-lg" />    {/* 10px */}
+
+// Extra large for modals and dialogs
+<div className="rounded-xl" />       {/* 12px */}
+
+// Circular for avatars and badges
+<div className="rounded-full" />     {/* 999px */}
 ```
+
+### Per-Corner Usage
+
+Apply border radius to specific corners:
+
+```tsx
+// Top corners only
+<div className="rounded-t-lg" />
+
+// Bottom corners only
+<div className="rounded-b-md" />
+
+// Left corners only
+<div className="rounded-l-xl" />
+
+// Single corner
+<div className="rounded-tl-2xl" />
+```
+
+### Usage Guidelines
+
+- **Inputs and form controls:** Use `rounded-sm` (6px) for subtle rounding
+- **Buttons:** Use `rounded-lg` (10px) for standard buttons
+- **Cards and containers:** Use `rounded-md` (8px) to `rounded-xl` (12px)
+- **Modals and dialogs:** Use `rounded-xl` (12px) to `rounded-2xl` (14px)
+- **Avatars and pills:** Use `rounded-full` (999px) for circular elements
+- **Tags and badges:** Use `rounded-full` for pill-shaped elements
 
 ## Shadows
 
-Use Tailwind's default shadow scale:
+Sazonia uses custom shadow effect tokens from the Glow UI design system. These tokens are defined in `src/styles/shadows.css` and exposed to Tailwind utilities via `@theme inline` in `globals.css`.
+
+### Shadow Scale
+
+| Token          | CSS Variable     | Value                                    | Description           |
+| -------------- | ---------------- | ---------------------------------------- | --------------------- |
+| `shadow-none`  | `--shadow-none`  | `none`                                   | Removes shadow        |
+| `shadow-xs`    | `--shadow-xs`    | `0px 1px 2px 0px rgba(0,0,0,0.05)`       | Extra small, subtle   |
+| `shadow-sm`    | `--shadow-sm`    | `0px 1px 3px 0px rgba(0,0,0,0.1)`        | Small shadow          |
+| `shadow-md`    | `--shadow-md`    | `0px 4px 6px -1px rgba(0,0,0,0.08)`      | Medium shadow         |
+| `shadow-lg`    | `--shadow-lg`    | `0px 10px 15px -3px rgba(0,0,0,0.08)`    | Large shadow          |
+| `shadow-xl`    | `--shadow-xl`    | `0px 20px 25px -5px rgba(0,0,0,0.08)`    | Extra large shadow    |
+| `shadow-2xl`   | `--shadow-2xl`   | `0px 25px 50px -12px rgba(0,0,0,0.18)`   | 2x large shadow       |
+| `shadow-inner` | `--shadow-inner` | `inset 0px 2px 4px 0px rgba(0,0,0,0.06)` | Inner/inset shadow    |
+| `shadow-soft`  | `--shadow-soft`  | `0px 10px 15px -3px rgba(0,0,0,0.04)`    | Soft, diffused shadow |
+
+### Usage Examples
 
 ```tsx
-<div className="shadow-sm">   {/* Subtle */}
-<div className="shadow">      {/* Default */}
-<div className="shadow-md">   {/* Medium */}
-<div className="shadow-lg">   {/* Large */}
+// Minimal elevation for subtle elements
+<div className="shadow-xs" />
+
+// Light elevation for form inputs and interactive elements
+<div className="shadow-sm" />
+
+// Standard elevation for cards and containers
+<div className="shadow-md" />
+
+// Pronounced elevation for modals and dropdowns
+<div className="shadow-lg" />
+
+// High emphasis for prominent floating elements
+<div className="shadow-xl" />
+
+// Maximum emphasis for high-priority UI
+<div className="shadow-2xl" />
+
+// Pressed/embedded effect for active states
+<input className="shadow-inner" />
+
+// Soft, diffused shadow for delicate UI elements
+<div className="shadow-soft" />
+
+// Remove shadow (useful for hover states)
+<div className="hover:shadow-none" />
 ```
+
+### Usage Guidelines
+
+- **Inputs and form controls:** Use `shadow-xs` or `shadow-sm` for subtle depth
+- **Cards and containers:** Use `shadow-md` for standard elevation
+- **Dropdown menus:** Use `shadow-lg` for noticeable floating effect
+- **Modals and dialogs:** Use `shadow-lg` to `shadow-xl` for prominent overlay
+- **Popovers and tooltips:** Use `shadow-lg` for clear separation from content
+- **Pressed states:** Use `shadow-inner` for buttons/inputs in active state
+- **Delicate elements:** Use `shadow-soft` for gentle, diffused elevation
+
+### Shadow Transitions
+
+For smooth shadow transitions on interactive elements, combine with transition utilities:
+
+```tsx
+// Card with hover shadow
+<div className="shadow-md transition-shadow duration-300 hover:shadow-lg">
+  Card content
+</div>
+
+// Button with active pressed state
+<button className="shadow-sm transition-shadow active:shadow-inner">
+  Click me
+</button>
+
+// Subtle to prominent on focus
+<input className="shadow-xs transition-shadow focus:shadow-md" />
+```
+
+### Combining Shadows with States
+
+```tsx
+// Interactive card pattern
+<div className="
+  shadow-md
+  transition-all
+  duration-300
+  hover:shadow-lg
+  hover:-translate-y-0.5
+  active:shadow-sm
+  active:translate-y-0
+">
+  Elevated card
+</div>
+
+// Form input with focus shadow
+<input className="
+  shadow-xs
+  border
+  border-border
+  rounded-md
+  transition-shadow
+  focus:shadow-md
+  focus:border-primary
+"/>
+```
+
+### Notes
+
+- All shadows use RGBA values with consistent transparency for proper layering
+- The `shadow-soft` variant is unique to Glow UI - provides a more diffused, gentle shadow
+- The `shadow-inner` uses the `inset` keyword for pressed/embedded effects
+- Shadows work with Tailwind's responsive (`sm:shadow-lg`) and state variants (`hover:shadow-xl`)
+- Consider that shadow opacity may need adjustment for dark mode in the future
+
+## Blur Effects
+
+Sazonia uses custom blur effect tokens from the Glow UI design system. These tokens are defined in `src/styles/blur.css` and exposed to Tailwind utilities via `@theme inline` in `globals.css`. Blur effects are primarily used for creating glassmorphism and frosted glass UI effects.
+
+### Blur Scale
+
+| Token       | CSS Variable  | Value  | Description                             |
+| ----------- | ------------- | ------ | --------------------------------------- |
+| `blur-none` | `--blur-none` | `0`    | No blur, removes blur effect            |
+| `blur-sm`   | `--blur-sm`   | `4px`  | Small blur for subtle glassmorphism     |
+| `blur-md`   | `--blur-md`   | `8px`  | Medium blur, default for most use cases |
+| `blur-lg`   | `--blur-lg`   | `12px` | Large blur for pronounced glass effects |
+| `blur-xl`   | `--blur-xl`   | `20px` | Extra large blur for heavy overlays     |
+
+### Usage Examples
+
+```tsx
+// Subtle glass effect for cards
+<div className="bg-white/18 backdrop-blur-sm" />
+
+// Standard glassmorphism for modals
+<div className="bg-white/20 backdrop-blur-md" />
+
+// Pronounced glass effect for overlays
+<div className="bg-white/25 backdrop-blur-lg" />
+
+// Heavy glassmorphism for full-screen overlays
+<div className="bg-white/30 backdrop-blur-xl" />
+
+// Remove blur (useful for responsive or state changes)
+<div className="backdrop-blur-md lg:backdrop-blur-none" />
+```
+
+### Glassmorphism Pattern
+
+The common glassmorphism pattern combines blur with semi-transparent backgrounds:
+
+```tsx
+// Complete glassmorphism card
+<div className="
+  bg-white/18
+  backdrop-blur-md
+  border
+  border-white/20
+  rounded-xl
+  shadow-lg
+">
+  Glass card content
+</div>
+
+// Dark glassmorphism variant
+<div className="
+  bg-black/30
+  backdrop-blur-lg
+  border
+  border-white/10
+  rounded-xl
+">
+  Dark glass content
+</div>
+```
+
+### Usage Guidelines
+
+- **Subtle glass effects:** Use `backdrop-blur-sm` (4px) for light frosted effects
+- **Standard glassmorphism:** Use `backdrop-blur-md` (8px) for most glass UI elements
+- **Modal overlays:** Use `backdrop-blur-lg` (12px) for dialog backgrounds
+- **Full-screen overlays:** Use `backdrop-blur-xl` (20px) for heavy blur effects
+- **Performance:** Use blur sparingly on mobile devices as it can impact performance
+- **Accessibility:** Ensure text remains readable over blurred backgrounds with sufficient contrast
+
+### Combining Blur with States
+
+```tsx
+// Interactive glass card
+<div className="
+  bg-white/15
+  backdrop-blur-sm
+  transition-all
+  duration-300
+  hover:bg-white/25
+  hover:backdrop-blur-md
+">
+  Hover for more blur
+</div>
+
+// Responsive blur
+<div className="
+  backdrop-blur-sm
+  md:backdrop-blur-md
+  lg:backdrop-blur-lg
+">
+  Responsive glass effect
+</div>
+```
+
+### Accessibility Considerations
+
+- Always ensure sufficient color contrast for text over blurred backgrounds (WCAG 2.1 AA compliance)
+- Test with high contrast mode enabled
+- Consider providing a fallback for browsers that don't support backdrop-filter
+- Use `motion-reduce:backdrop-blur-none` for users who prefer reduced motion
+
+```tsx
+// Accessible glassmorphism with fallback
+<div className="bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/18 motion-reduce:backdrop-blur-none">
+  Accessible glass content
+</div>
+```
+
+### Browser Support Notes
+
+- Safari requires `-webkit-backdrop-filter` prefix, but Tailwind handles this automatically
+- Fallback backgrounds should be more opaque for browsers without support
+- Test on iOS Safari, which has had historical issues with backdrop-filter
+- The `@supports` query can be used for progressive enhancement
+
+### Notes
+
+- Blur effects are GPU-accelerated but can impact performance on lower-end devices
+- The blur scale aligns with common glassmorphism patterns in modern UI design (macOS, iOS, Windows 11)
+- These tokens work with both `backdrop-blur-*` (for background blur) and `blur-*` (for element blur)
+- Blur effects work with Tailwind's responsive (`sm:backdrop-blur-lg`) and state variants (`hover:backdrop-blur-xl`)
+- Consider reducing or removing blur effects for users who prefer reduced motion
 
 ## Custom Utilities
 
@@ -2373,11 +2838,11 @@ Global base styles applied to all elements:
 ```css
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply outline-ring/50 border-border;
   }
 
   html {
-    @apply border-primary bg-primary border-b-6;
+    @apply border-b-6 border-primary bg-primary;
   }
 
   body {
@@ -2461,7 +2926,7 @@ Order classes for readability:
 ">
 ```
 
-**Note:** Prettier with `prettier-plugin-tailwindcss` automatically sorts classes for you.
+**Note:** Prettier with `prettier-plugin-tailwindcss` automatically sorts classes for you. See [Code Quality Guidelines](./code-quality.md) for the full configuration.
 
 ## Container Patterns
 
@@ -2514,7 +2979,7 @@ Order classes for readability:
 ### Card
 
 ```tsx
-<div className="border-border rounded-lg border bg-white p-6 shadow-sm">
+<div className="rounded-lg border border-border bg-white p-6 shadow-sm">
   Card content
 </div>
 ```
@@ -2530,7 +2995,7 @@ Order classes for readability:
 ### Input
 
 ```tsx
-<input className="border-input placeholder:text-muted-foreground focus-visible:ring-ring w-full rounded-lg border bg-white px-3 py-2 text-base focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50" />
+<input className="border-input focus-visible:ring-ring w-full rounded-lg border bg-white px-3 py-2 text-base placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50" />
 ```
 
 ## Best Practices

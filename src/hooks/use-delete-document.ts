@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 import { deleteDoc, doc } from 'firebase/firestore';
 
-import { db } from '@/lib/firebase/client';
+import { getClientDb } from '@/lib/firebase/client';
 
 interface UseDeleteDocumentResult {
   deleteDocument: (documentId: string) => Promise<void>;
@@ -39,7 +39,7 @@ export function useDeleteDocument(
       setError(null);
 
       try {
-        await deleteDoc(doc(db, collectionName, documentId));
+        await deleteDoc(doc(getClientDb(), collectionName, documentId));
       } catch (err) {
         const error = err as Error;
         setError(error);

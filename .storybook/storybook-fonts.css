@@ -1,0 +1,22 @@
+/**
+ * Font loading for Storybook
+ * Loads Inter font to match the Next.js app configuration
+ */
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../src/app/fonts/InterVariable.woff2') format('woff2');
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../src/app/fonts/InterVariable-Italic.woff2') format('woff2');
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --font-inter: 'Inter', system-ui, sans-serif;
+}

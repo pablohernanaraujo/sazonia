@@ -8,7 +8,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 
-import { db } from '@/lib/firebase/client';
+import { getClientDb } from '@/lib/firebase/client';
 
 interface UseUpdateDocumentResult<T> {
   updateDocument: (
@@ -50,7 +50,7 @@ export function useUpdateDocument<T extends DocumentData = DocumentData>(
       setError(null);
 
       try {
-        await updateDoc(doc(db, collectionName, documentId), {
+        await updateDoc(doc(getClientDb(), collectionName, documentId), {
           ...data,
           updatedAt: serverTimestamp(),
         });

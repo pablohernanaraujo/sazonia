@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useReducer } from 'react';
 import { doc, type DocumentData, onSnapshot } from 'firebase/firestore';
 
-import { db } from '@/lib/firebase/client';
+import { getClientDb } from '@/lib/firebase/client';
 
 interface UseDocumentOptions {
   enabled?: boolean;
@@ -75,7 +75,7 @@ export function useDocument<T = DocumentData>(
 
     dispatch({ type: 'START' });
 
-    const docRef = doc(db, collectionName, documentId!);
+    const docRef = doc(getClientDb(), collectionName, documentId!);
 
     const unsubscribe = onSnapshot(
       docRef,

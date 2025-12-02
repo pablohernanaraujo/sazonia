@@ -1,0 +1,48 @@
+/**
+ * Glow UI Design System - Spacing Tokens
+ * Source: Figma Glow UI Pro 1.8
+ *
+ * This file contains all spacing variables for consistent layout and component sizing.
+ * The spacing scale is based on a 2px base unit with incremental steps.
+ *
+ * Naming convention:
+ * - Semantic sizes: none, xxs, xs, sm, md, lg, xl, xxl
+ * - Numeric sizes: 3xl through 15xl for larger values
+ *
+ * Usage:
+ * - Padding: padding: var(--spacing-md);
+ * - Gap: gap: var(--spacing-lg);
+ * - Margin: margin: var(--spacing-xl);
+ */
+
+:root {
+  /* ============================================
+   * SPACING SCALE
+   * Base unit: 2px (0.125rem)
+   * ============================================ */
+
+  /* Semantic Sizes */
+  --spacing-none: 0rem; /* 0px */
+  --spacing-xxs: 0.125rem; /* 2px */
+  --spacing-xs: 0.25rem; /* 4px */
+  --spacing-sm: 0.375rem; /* 6px */
+  --spacing-md: 0.5rem; /* 8px */
+  --spacing-lg: 0.625rem; /* 10px */
+  --spacing-xl: 0.75rem; /* 12px */
+  --spacing-xxl: 0.875rem; /* 14px */
+
+  /* Numeric Sizes */
+  --spacing-3xl: 1rem; /* 16px */
+  --spacing-4xl: 1.125rem; /* 18px */
+  --spacing-5xl: 1.25rem; /* 20px */
+  --spacing-6xl: 1.5rem; /* 24px */
+  --spacing-7xl: 1.75rem; /* 28px */
+  --spacing-8xl: 2rem; /* 32px */
+  --spacing-9xl: 2.25rem; /* 36px */
+  --spacing-10xl: 2.5rem; /* 40px */
+  --spacing-11xl: 3rem; /* 48px */
+  --spacing-12xl: 3.5rem; /* 56px */
+  --spacing-13xl: 4rem; /* 64px */
+  --spacing-14xl: 5rem; /* 80px */
+  --spacing-15xl: 6rem; /* 96px */
+}

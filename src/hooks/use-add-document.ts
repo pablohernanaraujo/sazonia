@@ -8,7 +8,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 
-import { db } from '@/lib/firebase/client';
+import { getClientDb } from '@/lib/firebase/client';
 
 interface UseAddDocumentResult<T> {
   addDocument: (
@@ -46,7 +46,7 @@ export function useAddDocument<T extends DocumentData = DocumentData>(
       setError(null);
 
       try {
-        const docRef = await addDoc(collection(db, collectionName), {
+        const docRef = await addDoc(collection(getClientDb(), collectionName), {
           ...data,
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),

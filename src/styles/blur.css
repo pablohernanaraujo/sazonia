@@ -1,0 +1,48 @@
+/**
+ * Glow UI Design System - Blur Effect Tokens
+ * Source: Figma Glow UI Pro 1.8
+ *
+ * This file contains all blur effect variables for consistent glassmorphism styling.
+ * The blur scale provides different levels of backdrop blur intensity for UI elements.
+ *
+ * Naming convention:
+ * - Semantic sizes: none, sm, md, lg, xl
+ * - Used primarily with backdrop-filter: blur() for glassmorphism effects
+ *
+ * Usage:
+ * - No blur: backdrop-filter: blur(var(--blur-none));
+ * - Subtle glass: backdrop-filter: blur(var(--blur-sm));
+ * - Standard glass: backdrop-filter: blur(var(--blur-md));
+ * - Pronounced glass: backdrop-filter: blur(var(--blur-lg));
+ * - Heavy glass: backdrop-filter: blur(var(--blur-xl));
+ *
+ * Common glassmorphism pattern:
+ * .glass-card {
+ *   background: rgba(255, 255, 255, 0.18);
+ *   backdrop-filter: blur(var(--blur-md));
+ *   -webkit-backdrop-filter: blur(var(--blur-md));
+ *   border: 1px solid rgba(255, 255, 255, 0.2);
+ * }
+ */
+
+:root {
+  /* ============================================
+   * BLUR SCALE
+   * All blur values use pixels for consistent behavior
+   * ============================================ */
+
+  /* None - No blur effect, utility for removing blur */
+  --blur-none: 0;
+
+  /* Small - 4px blur for subtle glassmorphism effects */
+  --blur-sm: 4px;
+
+  /* Medium - 8px blur, default for most backdrop blur use cases */
+  --blur-md: 8px;
+
+  /* Large - 12px blur for more pronounced glass effects */
+  --blur-lg: 12px;
+
+  /* Extra Large - 20px blur for heavy glassmorphism overlays */
+  --blur-xl: 20px;
+}

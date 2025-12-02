@@ -623,5 +623,6 @@ children: 'Lorem ipsum dolor sit'; // Use real content
 For more details:
 
 - See existing stories in `src/stories/` for examples
+- See `.claude/rules/code-quality.md` for ESLint rules specific to story files
 - Storybook documentation: https://storybook.js.org/docs
 - Component-driven development: https://componentdriven.org/

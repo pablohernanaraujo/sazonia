@@ -1,0 +1,49 @@
+/**
+ * Sazonia Design System - Style Aggregator
+ *
+ * This file serves as the single entry point for all design tokens.
+ * Import this file in globals.css to access all theme variables.
+ *
+ * Architecture (3 Layers):
+ * 1. Core/Primitives: Raw color, spacing, radius, shadow, blur values
+ * 2. Semantic: Maps primitives to intent (surface, brand, text, etc.)
+ * 3. Components: Component-specific tokens referencing semantic layer
+ */
+
+/* ============================================
+ * LAYER 1: Core/Primitive Tokens
+ * ============================================ */
+
+/* Color tokens from Glow UI design system */
+@import './colors.css';
+
+/* Spacing tokens from Glow UI design system */
+@import './spacing.css';
+
+/* Border radius tokens from Glow UI design system */
+@import './border-radius.css';
+
+/* Shadow effect tokens from Glow UI design system */
+@import './shadows.css';
+
+/* Blur effect tokens from Glow UI design system */
+@import './blur.css';
+
+/* ============================================
+ * LAYER 2: Semantic Tokens
+ * ============================================ */
+
+/* Light theme semantic tokens */
+@import './tokens/semantic/theme-light.css';
+
+/* ============================================
+ * LAYER 3: Component Tokens
+ * ============================================ */
+
+/* Button component tokens */
+@import './tokens/components/button.css';
+
+/* Future component token imports:
+ * @import './tokens/components/input.css';
+ * @import './tokens/components/card.css';
+ */

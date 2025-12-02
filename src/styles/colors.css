@@ -1,0 +1,375 @@
+/**
+ * Glow UI Design System - Color Tokens
+ * Source: Figma Glow UI Pro 1.8
+ *
+ * This file contains all color variables organized by context:
+ * - Text colors (base, overlay, semantic)
+ * - Background colors (surface)
+ * - Border colors
+ *
+ * Each color includes states: default, hover, active, disabled
+ */
+
+:root {
+  /* ============================================
+   * TEXT COLORS - BASE
+   * For text on light backgrounds
+   * ============================================ */
+
+  /* Text Base - Primary */
+  --text-base-primary: #11181c;
+  --text-base-primary-hover: #11181c;
+  --text-base-primary-active: #11181c;
+  --text-base-primary-disabled: #11181c52;
+
+  /* Text Base - Secondary */
+  --text-base-secondary: #697177;
+  --text-base-secondary-hover: #11181c;
+  --text-base-secondary-active: #11181c;
+  --text-base-secondary-disabled: #69717752;
+
+  /* Text Base - Tertiary */
+  --text-base-tertiary: #889096;
+  --text-base-tertiary-hover: #11181c;
+  --text-base-tertiary-active: #11181c;
+  --text-base-tertiary-disabled: #88909652;
+
+  /* Text Base - Subtle */
+  --text-base-subtle: #c1c8cd;
+  --text-base-subtle-hover: #11181c;
+  --text-base-subtle-active: #11181c;
+  --text-base-subtle-disabled: #c1c8cd52;
+
+  /* ============================================
+   * TEXT COLORS - OVERLAY WHITE
+   * For text on dark/image backgrounds
+   * ============================================ */
+
+  /* Text Overlay White - Primary */
+  --text-overlay-w-primary: #ffffff;
+  --text-overlay-w-primary-hover: #ffffff;
+  --text-overlay-w-primary-active: #ffffff;
+  --text-overlay-w-primary-disabled: #ffffff52;
+
+  /* Text Overlay White - Secondary */
+  --text-overlay-w-secondary: #ffffff63;
+  --text-overlay-w-secondary-hover: #ffffff;
+  --text-overlay-w-secondary-active: #ffffff;
+  --text-overlay-w-secondary-disabled: #ffffff3d;
+
+  /* ============================================
+   * TEXT COLORS - OVERLAY BLACK
+   * For text on light image backgrounds
+   * ============================================ */
+
+  /* Text Overlay Black - Primary */
+  --text-overlay-b-primary: #000000;
+  --text-overlay-b-primary-hover: #000000;
+  --text-overlay-b-primary-active: #000000;
+  --text-overlay-b-primary-disabled: #00000052;
+
+  /* Text Overlay Black - Secondary */
+  --text-overlay-b-secondary: #00000070;
+  --text-overlay-b-secondary-hover: #000000;
+  --text-overlay-b-secondary-active: #000000;
+  --text-overlay-b-secondary-disabled: #0000003d;
+
+  /* ============================================
+   * TEXT COLORS - SEMANTIC
+   * For meaningful/status text
+   * ============================================ */
+
+  /* Text Semantic - Brand */
+  --text-semantic-brand: #3c61dd;
+  --text-semantic-brand-hover: #2f4ebd;
+  --text-semantic-brand-active: #273f99;
+  --text-semantic-brand-disabled: #3c61dd52;
+
+  /* Text Semantic - Success */
+  --text-semantic-success: #45a557;
+  --text-semantic-success-hover: #357a42;
+  --text-semantic-success-active: #2a6134;
+  --text-semantic-success-disabled: #45a55752;
+
+  /* Text Semantic - Warning */
+  --text-semantic-warning: #ff9f1a;
+  --text-semantic-warning-hover: #cc7f15;
+  --text-semantic-warning-active: #a66611;
+  --text-semantic-warning-disabled: #ff9f1a52;
+
+  /* Text Semantic - Danger */
+  --text-semantic-danger: #e54d2e;
+  --text-semantic-danger-hover: #b73d25;
+  --text-semantic-danger-active: #95311e;
+  --text-semantic-danger-disabled: #e54d2e52;
+
+  /* Text Semantic - Additional (Purple) */
+  --text-semantic-additional: #8e4ec6;
+  --text-semantic-additional-hover: #723f9f;
+  --text-semantic-additional-active: #5c3381;
+  --text-semantic-additional-disabled: #8e4ec652;
+
+  /* ============================================
+   * BACKGROUND COLORS - SURFACE BASE
+   * For page and component backgrounds
+   * ============================================ */
+
+  /* Background Surface Base - Primary */
+  --bg-surface-base-primary: #ffffff;
+  --bg-surface-base-primary-hover: #f9fafb;
+  --bg-surface-base-primary-active: #f0f2f4;
+  --bg-surface-base-primary-disabled: #f0f2f4;
+
+  /* Background Surface Base - Secondary */
+  --bg-surface-base-secondary: #f9fafb;
+  --bg-surface-base-secondary-hover: #f0f2f4;
+  --bg-surface-base-secondary-active: #ebedef;
+  --bg-surface-base-secondary-disabled: #ebedef;
+
+  /* Background Surface Base - Tertiary */
+  --bg-surface-base-tertiary: #f0f2f4;
+  --bg-surface-base-tertiary-hover: #ebedef;
+  --bg-surface-base-tertiary-active: #e6e8eb;
+  --bg-surface-base-tertiary-disabled: #e6e8eb;
+
+  /* ============================================
+   * BACKGROUND COLORS - SURFACE BRAND
+   * For branded/accent backgrounds
+   * ============================================ */
+
+  /* Background Surface Brand - Primary */
+  --bg-surface-brand-primary: #fcfcfd;
+  --bg-surface-brand-primary-hover: #fafbff;
+  --bg-surface-brand-primary-active: #f0f4ff;
+  --bg-surface-brand-primary-disabled: #f0f4ff;
+
+  /* Background Surface Brand - Secondary */
+  --bg-surface-brand-secondary: #fafbff;
+  --bg-surface-brand-secondary-hover: #f0f4ff;
+  --bg-surface-brand-secondary-active: #e7edfe;
+  --bg-surface-brand-secondary-disabled: #e7edfe;
+
+  /* Background Surface Brand - Tertiary */
+  --bg-surface-brand-tertiary: #f0f4ff;
+  --bg-surface-brand-tertiary-hover: #e7edfe;
+  --bg-surface-brand-tertiary-active: #d9e2fc;
+  --bg-surface-brand-tertiary-disabled: #d9e2fc;
+
+  /* ============================================
+   * BACKGROUND COLORS - SURFACE OVERLAY WHITE
+   * For overlays on dark backgrounds
+   * ============================================ */
+
+  /* Background Surface Overlay White - Primary */
+  --bg-surface-overlay-w-primary: transparent;
+  --bg-surface-overlay-w-primary-hover: #ffffff03;
+  --bg-surface-overlay-w-primary-active: #ffffff08;
+  --bg-surface-overlay-w-primary-disabled: #ffffff08;
+
+  /* Background Surface Overlay White - Secondary */
+  --bg-surface-overlay-w-secondary: #ffffff03;
+  --bg-surface-overlay-w-secondary-hover: #ffffff08;
+  --bg-surface-overlay-w-secondary-active: #ffffff0f;
+  --bg-surface-overlay-w-secondary-disabled: #ffffff0f;
+
+  /* Background Surface Overlay White - Tertiary */
+  --bg-surface-overlay-w-tertiary: #ffffff08;
+  --bg-surface-overlay-w-tertiary-hover: #ffffff0f;
+  --bg-surface-overlay-w-tertiary-active: #ffffff17;
+  --bg-surface-overlay-w-tertiary-disabled: #ffffff17;
+
+  /* ============================================
+   * BACKGROUND COLORS - SURFACE OVERLAY BLACK
+   * For overlays on light backgrounds
+   * ============================================ */
+
+  /* Background Surface Overlay Black - Primary */
+  --bg-surface-overlay-b-primary: #00000003;
+  --bg-surface-overlay-b-primary-hover: #00000008;
+  --bg-surface-overlay-b-primary-active: #0000000d;
+  --bg-surface-overlay-b-primary-disabled: #0000000d;
+
+  /* Background Surface Overlay Black - Secondary */
+  --bg-surface-overlay-b-secondary: #00000008;
+  --bg-surface-overlay-b-secondary-hover: #0000000d;
+  --bg-surface-overlay-b-secondary-active: #00000012;
+  --bg-surface-overlay-b-secondary-disabled: #00000012;
+
+  /* Background Surface Overlay Black - Tertiary */
+  --bg-surface-overlay-b-tertiary: #0000000d;
+  --bg-surface-overlay-b-tertiary-hover: #00000012;
+  --bg-surface-overlay-b-tertiary-active: #00000017;
+  --bg-surface-overlay-b-tertiary-disabled: #00000017;
+
+  /* ============================================
+   * BACKGROUND COLORS - FILL BASE
+   * For solid/filled component backgrounds
+   * ============================================ */
+
+  /* Background Fill Base - Primary */
+  --bg-fill-base-primary: #889096;
+  --bg-fill-base-primary-hover: #7d868c;
+  --bg-fill-base-primary-active: #697177;
+  --bg-fill-base-primary-disabled: #c1c8cd;
+  --bg-fill-base-primary-subtle: #c1c8cd;
+
+  /* Background Fill Base - Secondary */
+  --bg-fill-base-secondary: #d7dbdf;
+  --bg-fill-base-secondary-hover: #c1c8cd;
+  --bg-fill-base-secondary-active: #889096;
+  --bg-fill-base-secondary-disabled: #e0e3e6;
+  --bg-fill-base-secondary-subtle: #e0e3e6;
+
+  /* Background Fill Base - Tertiary */
+  --bg-fill-base-tertiary: #ebedef;
+  --bg-fill-base-tertiary-hover: #e6e8eb;
+  --bg-fill-base-tertiary-active: #e0e3e6;
+  --bg-fill-base-tertiary-disabled: #f0f2f4;
+  --bg-fill-base-tertiary-subtle: #f0f2f4;
+
+  /* ============================================
+   * BACKGROUND COLORS - FILL BRAND
+   * For solid branded backgrounds
+   * ============================================ */
+
+  /* Background Fill Brand - Primary */
+  --bg-fill-brand-primary: #3c61dd;
+  --bg-fill-brand-primary-hover: #385bcc;
+  --bg-fill-brand-primary-active: #3451b2;
+  --bg-fill-brand-primary-disabled: #8fa6ef;
+  --bg-fill-brand-primary-subtle: #8fa6ef;
+
+  /* Background Fill Brand - Secondary */
+  --bg-fill-brand-secondary: #adbff5;
+  --bg-fill-brand-secondary-hover: #8fa6ef;
+  --bg-fill-brand-secondary-active: #3c61dd;
+  --bg-fill-brand-secondary-disabled: #c8d5f9;
+  --bg-fill-brand-secondary-subtle: #c8d5f9;
+
+  /* Background Fill Brand - Tertiary */
+  --bg-fill-brand-tertiary: #e7edfe;
+  --bg-fill-brand-tertiary-hover: #d9e2fc;
+  --bg-fill-brand-tertiary-active: #c8d5f9;
+  --bg-fill-brand-tertiary-disabled: #f0f4ff;
+  --bg-fill-brand-tertiary-subtle: #f0f4ff;
+
+  /* ============================================
+   * BACKGROUND COLORS - FILL OVERLAY WHITE
+   * For solid overlays on dark backgrounds
+   * ============================================ */
+
+  /* Background Fill Overlay White - Primary */
+  --bg-fill-overlay-w-primary: #ffffff;
+  --bg-fill-overlay-w-primary-hover: #ffffff96;
+  --bg-fill-overlay-w-primary-active: #ffffff73;
+  --bg-fill-overlay-w-primary-disabled: #ffffff63;
+  --bg-fill-overlay-w-primary-subtle: #ffffff63;
+
+  /* Background Fill Overlay White - Secondary */
+  --bg-fill-overlay-w-secondary: #ffffff2e;
+  --bg-fill-overlay-w-secondary-hover: #ffffff40;
+  --bg-fill-overlay-w-secondary-active: #ffffff63;
+  --bg-fill-overlay-w-secondary-disabled: #ffffff1f;
+  --bg-fill-overlay-w-secondary-subtle: #ffffff1f;
+
+  /* Background Fill Overlay White - Tertiary */
+  --bg-fill-overlay-w-tertiary: #ffffff0f;
+  --bg-fill-overlay-w-tertiary-hover: #ffffff17;
+  --bg-fill-overlay-w-tertiary-active: #ffffff1f;
+  --bg-fill-overlay-w-tertiary-disabled: #ffffff08;
+  --bg-fill-overlay-w-tertiary-subtle: #ffffff08;
+
+  /* ============================================
+   * BACKGROUND COLORS - FILL OVERLAY BLACK
+   * For solid overlays on light backgrounds
+   * ============================================ */
+
+  /* Background Fill Overlay Black - Primary */
+  --bg-fill-overlay-b-primary: #00000070;
+  --bg-fill-overlay-b-primary-hover: #0000007a;
+  --bg-fill-overlay-b-primary-active: #0000008f;
+  --bg-fill-overlay-b-primary-disabled: #00000038;
+  --bg-fill-overlay-b-primary-subtle: #00000038;
+
+  /* Background Fill Overlay Black - Secondary */
+  --bg-fill-overlay-b-secondary: #00000024;
+  --bg-fill-overlay-b-secondary-hover: #00000038;
+  --bg-fill-overlay-b-secondary-active: #00000070;
+  --bg-fill-overlay-b-secondary-disabled: #0000001c;
+  --bg-fill-overlay-b-secondary-subtle: #0000001c;
+
+  /* Background Fill Overlay Black - Tertiary */
+  --bg-fill-overlay-b-tertiary: #00000012;
+  --bg-fill-overlay-b-tertiary-hover: #00000017;
+  --bg-fill-overlay-b-tertiary-active: #0000001c;
+  --bg-fill-overlay-b-tertiary-disabled: #0000000d;
+  --bg-fill-overlay-b-tertiary-subtle: #0000000d;
+
+  /* ============================================
+   * BORDER COLORS - BASE
+   * For component borders and dividers
+   * ============================================ */
+
+  /* Border Base - Primary */
+  --border-base-primary: #d7dbdf;
+  --border-base-primary-hover: #c1c8cd;
+  --border-base-primary-active: #889096;
+  --border-base-primary-disabled: #e0e3e6;
+
+  /* Border Base - Secondary */
+  --border-base-secondary: #e6e8eb;
+  --border-base-secondary-hover: #e0e3e6;
+  --border-base-secondary-active: #d7dbdf;
+  --border-base-secondary-disabled: #ebedef;
+
+  /* ============================================
+   * BORDER COLORS - BRAND
+   * For branded/accent borders
+   * ============================================ */
+
+  /* Border Brand - Primary */
+  --border-brand-primary: #adbff5;
+  --border-brand-primary-hover: #8fa6ef;
+  --border-brand-primary-active: #3c61dd;
+  --border-brand-primary-disabled: #c8d5f9;
+
+  /* Border Brand - Secondary */
+  --border-brand-secondary: #d9e2fc;
+  --border-brand-secondary-hover: #c8d5f9;
+  --border-brand-secondary-active: #adbff5;
+  --border-brand-secondary-disabled: #e7edfe;
+
+  /* ============================================
+   * BORDER COLORS - OVERLAY WHITE
+   * For borders on dark backgrounds
+   * ============================================ */
+
+  /* Border Overlay White - Primary */
+  --border-overlay-w-primary: #ffffff2e;
+  --border-overlay-w-primary-hover: #ffffff40;
+  --border-overlay-w-primary-active: #ffffff63;
+  --border-overlay-w-primary-disabled: #ffffff1f;
+
+  /* Border Overlay White - Secondary */
+  --border-overlay-w-secondary: #ffffff17;
+  --border-overlay-w-secondary-hover: #ffffff1f;
+  --border-overlay-w-secondary-active: #ffffff2e;
+  --border-overlay-w-secondary-disabled: #ffffff0f;
+
+  /* ============================================
+   * BORDER COLORS - OVERLAY BLACK
+   * For borders on light backgrounds
+   * ============================================ */
+
+  /* Border Overlay Black - Primary */
+  --border-overlay-b-primary: #00000024;
+  --border-overlay-b-primary-hover: #00000038;
+  --border-overlay-b-primary-active: #00000070;
+  --border-overlay-b-primary-disabled: #0000001c;
+
+  /* Border Overlay Black - Secondary */
+  --border-overlay-b-secondary: #00000017;
+  --border-overlay-b-secondary-hover: #0000001c;
+  --border-overlay-b-secondary-active: #00000024;
+  --border-overlay-b-secondary-disabled: #00000012;
+}

@@ -9,7 +9,7 @@ import {
   type QueryConstraint,
 } from 'firebase/firestore';
 
-import { db } from '@/lib/firebase/client';
+import { getClientDb } from '@/lib/firebase/client';
 
 interface UseCollectionOptions {
   constraints?: QueryConstraint[];
@@ -63,7 +63,7 @@ export function useCollection<T = DocumentData>(
     setLoading(true);
     setError(null);
 
-    const collectionRef = collection(db, collectionName);
+    const collectionRef = collection(getClientDb(), collectionName);
     const q = query(collectionRef, ...constraints);
 
     const unsubscribe = onSnapshot(

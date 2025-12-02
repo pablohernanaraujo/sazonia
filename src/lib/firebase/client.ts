@@ -36,7 +36,7 @@ function getFirebaseApp(): FirebaseApp | null {
   return initializeApp(firebaseConfig);
 }
 
-// Lazy initialization
+// Lazy initialization cache
 let _app: FirebaseApp | null | undefined;
 let _auth: Auth | undefined;
 let _db: Firestore | undefined;
@@ -55,40 +55,34 @@ function getApp(): FirebaseApp {
 }
 
 /**
- * Firebase Auth instance for client-side authentication
+ * Get Firebase Auth instance for client-side authentication
  */
-export const auth: Auth = new Proxy({} as Auth, {
-  get(_, prop) {
-    if (!_auth) {
-      _auth = getAuth(getApp());
-    }
-    return Reflect.get(_auth, prop);
-  },
-});
+export function getClientAuth(): Auth {
+  if (!_auth) {
+    _auth = getAuth(getApp());
+  }
+  return _auth;
+}
 
 /**
- * Firestore database instance for client-side operations
+ * Get Firestore database instance for client-side operations
  */
-export const db: Firestore = new Proxy({} as Firestore, {
-  get(_, prop) {
-    if (!_db) {
-      _db = getFirestore(getApp());
-    }
-    return Reflect.get(_db, prop);
-  },
-});
+export function getClientDb(): Firestore {
+  if (!_db) {
+    _db = getFirestore(getApp());
+  }
+  return _db;
+}
 
 /**
- * Firebase Storage instance for file uploads
+ * Get Firebase Storage instance for file uploads
  */
-export const storage: FirebaseStorage = new Proxy({} as FirebaseStorage, {
-  get(_, prop) {
-    if (!_storage) {
-      _storage = getStorage(getApp());
-    }
-    return Reflect.get(_storage, prop);
-  },
-});
+export function getClientStorage(): FirebaseStorage {
+  if (!_storage) {
+    _storage = getStorage(getApp());
+  }
+  return _storage;
+}
 
 /**
  * Firebase App instance (getter function)
@@ -96,3 +90,7 @@ export const storage: FirebaseStorage = new Proxy({} as FirebaseStorage, {
 export function getClientApp(): FirebaseApp {
   return getApp();
 }
+
+// Legacy aliases for backward compatibility
+// Prefer using getClientDb(), getClientAuth(), getClientStorage() directly
+export { getClientAuth as auth, getClientDb as db, getClientStorage as storage };

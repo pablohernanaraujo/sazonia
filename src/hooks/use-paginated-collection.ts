@@ -13,7 +13,7 @@ import {
   startAfter,
 } from 'firebase/firestore';
 
-import { db } from '@/lib/firebase/client';
+import { getClientDb } from '@/lib/firebase/client';
 
 interface UsePaginatedCollectionOptions {
   pageSize?: number;
@@ -87,7 +87,7 @@ export function usePaginatedCollection<T = DocumentData>(
       setError(null);
 
       try {
-        const collectionRef = collection(db, collectionName);
+        const collectionRef = collection(getClientDb(), collectionName);
         const queryConstraints: QueryConstraint[] = [
           ...constraints,
           orderBy(orderByField, orderDirection),

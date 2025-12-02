@@ -1,26 +1,189 @@
-@import "tailwindcss";
+/* Design system tokens */
+@import '../styles/index.css';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@import 'tailwindcss';
+
+@theme {
+  /* ============================================
+   * SEMANTIC COLOR MAPPINGS
+   * Maps Glow UI design tokens to Tailwind utilities
+   *
+   * In Tailwind v4, --color-* variables generate:
+   * - text-{name} for text color
+   * - bg-{name} for background color
+   * - border-{name} for border color
+   *
+   * NOTE: Values must be literal (not var() references)
+   * because @theme is processed at build time.
+   * ============================================ */
+
+  /* Background Surface colors */
+  --color-background: #ffffff;
+  --color-background-secondary: #f9fafb;
+  --color-background-tertiary: #f0f2f4;
+
+  /* Background Surface Brand */
+  --color-background-brand: #fcfcfd;
+  --color-background-brand-secondary: #fafbff;
+  --color-background-brand-tertiary: #f0f4ff;
+
+  /* Background Fill colors (solid backgrounds) */
+  --color-fill-primary: #3c61dd;
+  --color-fill-primary-hover: #385bcc;
+  --color-fill-primary-active: #3451b2;
+  --color-fill-primary-disabled: #8fa6ef;
+
+  --color-fill-secondary: #d7dbdf;
+  --color-fill-secondary-hover: #c1c8cd;
+  --color-fill-secondary-active: #889096;
+
+  --color-fill-tertiary: #ebedef;
+  --color-fill-tertiary-hover: #e6e8eb;
+  --color-fill-tertiary-active: #e0e3e6;
+
+  /* Foreground (text) colors */
+  --color-foreground: #11181c;
+  --color-muted-foreground: #697177;
+
+  /* Brand/Primary color (blue) */
+  --color-primary: #3c61dd;
+  --color-primary-hover: #2f4ebd;
+  --color-primary-active: #273f99;
+  --color-primary-disabled: #3c61dd52;
+
+  /* Secondary color (gray) */
+  --color-secondary: #697177;
+  --color-secondary-hover: #11181c;
+  --color-secondary-active: #11181c;
+  --color-secondary-disabled: #69717752;
+
+  /* Semantic colors */
+  --color-success: #45a557;
+  --color-success-hover: #357a42;
+  --color-success-active: #2a6134;
+  --color-success-disabled: #45a55752;
+
+  --color-warning: #ff9f1a;
+  --color-warning-hover: #cc7f15;
+  --color-warning-active: #a66611;
+  --color-warning-disabled: #ff9f1a52;
+
+  --color-destructive: #e54d2e;
+  --color-destructive-hover: #b73d25;
+  --color-destructive-active: #95311e;
+  --color-destructive-disabled: #e54d2e52;
+
+  --color-info: #8e4ec6;
+  --color-info-hover: #723f9f;
+  --color-info-active: #5c3381;
+  --color-info-disabled: #8e4ec652;
+
+  /* Border colors - Base */
+  --color-border: #d7dbdf;
+  --color-border-hover: #c1c8cd;
+  --color-border-active: #889096;
+  --color-border-disabled: #e0e3e6;
+
+  --color-border-secondary: #e6e8eb;
+  --color-border-secondary-hover: #e0e3e6;
+  --color-border-secondary-active: #d7dbdf;
+
+  /* Border colors - Brand */
+  --color-border-brand: #adbff5;
+  --color-border-brand-hover: #8fa6ef;
+  --color-border-brand-active: #3c61dd;
+
+  /* Border colors - Overlay */
+  --color-border-overlay: #00000024;
+  --color-border-overlay-hover: #00000038;
+  --color-border-overlay-active: #00000070;
+
+  /* Text context colors (for granular text styling) */
+  --color-text-primary: #11181c;
+  --color-text-secondary: #c1c8cd;
+  --color-text-tertiary: #889096;
+  --color-text-subtle: #697177;
+
+  /* Overlay text colors (for dark backgrounds) */
+  --color-text-overlay-white: #ffffff;
+  --color-text-overlay-white-secondary: #ffffff63;
+
+  /* Overlay text colors (for light image backgrounds) */
+  --color-text-overlay-black: #000000;
+  --color-text-overlay-black-secondary: #00000070;
+
+  /* Font configuration */
+  --font-sans: var(--font-inter);
+
+  /* Border Radius - using literal values */
+  --radius-none: 0px;
+  --radius-xxs: 2px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-4xl: 32px;
+  --radius-full: 9999px;
+
+  /* Shadow Effects */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl:
+    0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --shadow-soft: 0 2px 8px 0 rgb(0 0 0 / 0.08);
+  --shadow-none: 0 0 #0000;
+
+  /* Blur Effects */
+  --blur-none: 0;
+  --blur-sm: 4px;
+  --blur-md: 8px;
+  --blur-lg: 12px;
+  --blur-xl: 16px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Dark mode - activated by .dark class on html/body */
+.dark {
+  --color-background: #0a0a0a;
+  --color-foreground: #ededed;
+  --color-muted-foreground: #a3a3a3;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+/* Autofill detection animations for floating label inputs */
+@keyframes onAutoFillStart {
+  from {
+    /* empty */
+  }
+  to {
+    /* empty */
+  }
+}
+
+@keyframes onAutoFillCancel {
+  from {
+    /* empty */
+  }
+  to {
+    /* empty */
+  }
+}
+
+input:-webkit-autofill {
+  animation-name: onAutoFillStart;
+}
+
+input:not(:-webkit-autofill) {
+  animation-name: onAutoFillCancel;
 }

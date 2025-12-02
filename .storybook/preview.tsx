@@ -1,26 +1,13 @@
+import './storybook-fonts.css';
 import '../src/app/globals.css';
 
-import React from 'react';
-import type { Preview, ReactRenderer } from '@storybook/react';
-import type { DecoratorFunction } from 'storybook/internal/types';
-
-/**
- * Font decorator that applies Geist font CSS variables
- * Mimics the font configuration from src/app/layout.tsx
- */
-const withFonts: DecoratorFunction<ReactRenderer> = (Story) => (
-  <div
-    style={{
-      fontFamily: 'var(--font-geist-sans, ui-sans-serif, system-ui, sans-serif)',
-    }}
-  >
-    <Story />
-  </div>
-);
+import type { Preview } from '@storybook/react';
 
 const preview: Preview = {
-  decorators: [withFonts],
   parameters: {
+    backgrounds: {
+      default: 'light',
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,
